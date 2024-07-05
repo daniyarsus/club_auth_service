@@ -2,7 +2,7 @@ from pydantic import BaseModel, EmailStr, field_validator, ValidationError
 from phonenumbers import parse
 
 
-class RegisterUserWithMailDTO(BaseModel):
+class RegisterUserWithEmailDTO(BaseModel):
     email: EmailStr
     username: str
     password: str
@@ -13,11 +13,11 @@ class RegisterUserWithMailDTO(BaseModel):
             raise ValidationError('Username must be at least 1 character!')
 
 
-class RegisterUserWithMailGetCodeDTO(BaseModel):
+class VerifyUserWithEmailGetCodeDTO(BaseModel):
     email: EmailStr
 
 
-class RegisterUserWithMailSetCodeResponse(BaseModel):
+class VerifyUserWithEmailSetCodeDTO(BaseModel):
     email: EmailStr
     code: str
 
@@ -42,3 +42,25 @@ class RegisterUserWithPhoneDTO(BaseModel):
         if len(v) <= 3:
             raise ValidationError('Username must be at least 1 character!')
 
+
+class VerifyUserWithPhoneGetCodeDTO(BaseModel):
+    phone: str
+
+    @field_validator('phone')
+    def validate_phone(cls, v):
+        if not parse(v):
+            raise ValidationError('Phone number must be entered in the format: +999999999!')
+
+
+class VerifyUserWithPhoneSetCodeDTO(BaseModel):
+    phone: str
+    code: str
+
+    @field_validator('phone')
+    def validate_phone(cls, v):
+        if not parse(v):
+            raise ValidationError('Phone number must be entered in the format: +999999999!')
+    @field_validator('code')
+    def validate_code(cls, v):
+        if len(v) != 6:
+            raise ValidationError('Code must be 6 digits!')

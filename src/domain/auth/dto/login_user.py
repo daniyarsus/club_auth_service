@@ -9,10 +9,10 @@ class LoginUserWithUsernameDTO(BaseModel):
     @field_validator('username')
     def validate_username(cls, v):
         if len(v) <= 1:
-            raise ValueError('Username must be at least 1 character!')
+            raise ValidationError('Username must be at least 1 character!')
 
 
-class LoginUserWithMailDTO(BaseModel):
+class LoginUserWithEmailDTO(BaseModel):
     email: EmailStr
     password: str
 

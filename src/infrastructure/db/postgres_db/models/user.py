@@ -13,8 +13,14 @@ class User(SQLAlchemyBase):
         Integer, primary_key=True, index=True
     )
 
+    email: Mapped[str] = mapped_column(
+        String, index=True, unique=True, nullable=False
+    )
+    phone: Mapped[str] = mapped_column(
+        String, index=True, unique=True, nullable=False
+    )
     username: Mapped[str] = mapped_column(
-        String, unique=True, nullable=False, index=True
+        String, index=True, unique=True, nullable=False
     )
     password: Mapped[str] = mapped_column(
         String, nullable=False

@@ -2,13 +2,14 @@ from pydantic import BaseModel, EmailStr, field_validator, ValidationError
 from phonenumbers import parse
 
 
-class ResetPasswordWithMailGetCodeDTO(BaseModel):
+class ResetPasswordWithEmailGetCodeDTO(BaseModel):
     email: EmailStr
 
 
-class ResetPasswordWithMailSetCodeDTO(BaseModel):
+class ResetPasswordWithEmailSetCodeDTO(BaseModel):
     email: EmailStr
     code: str
+    new_password: str
 
     @field_validator('code')
     def validate_code(cls, v):
@@ -28,6 +29,7 @@ class ResetPasswordWithPhoneGetCodeDTO(BaseModel):
 class ResetPasswordWithPhoneSetCodeDTO(BaseModel):
     phone: str
     code: str
+    new_password: str
 
     @field_validator('phone')
     def validate_phone(cls, v):

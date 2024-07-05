@@ -1,15 +1,13 @@
 from pydantic import BaseModel, EmailStr, field_validator, ValidationError
 
 
-class ResetMailGetCodeDTO(BaseModel):
+class ResetEmailGetCodeDTO(BaseModel):
     email: EmailStr
-    old_password: str
 
 
-class ResetMailSetCodeDTO(BaseModel):
+class ResetEmailSetCodeDTO(BaseModel):
     email: EmailStr
     code: str
-    new_password: str
 
     @field_validator('code')
     def validate_code(cls, v):

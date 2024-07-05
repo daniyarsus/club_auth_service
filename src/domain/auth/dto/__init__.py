@@ -1,19 +1,23 @@
 from .login_user import (
     LoginUserWithUsernameDTO,
-    LoginUserWithMailDTO,
+    LoginUserWithEmailDTO,
     LoginUserWithPhoneDTO
 )
 from .register_user import (
     RegisterUserWithEmailDTO,
-    RegisterUserWithPhoneDTO
+    VerifyUserWithEmailGetCodeDTO,
+    VerifyUserWithEmailSetCodeDTO,
+    RegisterUserWithPhoneDTO,
+    VerifyUserWithPhoneGetCodeDTO,
+    VerifyUserWithPhoneSetCodeDTO
 )
-from .reset_mail import (
-    ResetMailGetCodeDTO,
-    ResetMailSetCodeDTO
+from .reset_email import (
+    ResetEmailGetCodeDTO,
+    ResetEmailSetCodeDTO
 )
 from .reset_password import (
-    ResetPasswordWithMailGetCodeDTO,
-    ResetPasswordWithMailSetCodeDTO,
+    ResetPasswordWithEmailGetCodeDTO,
+    ResetPasswordWithEmailSetCodeDTO,
     ResetPasswordWithPhoneGetCodeDTO,
     ResetPasswordWithPhoneSetCodeDTO
 )
@@ -26,11 +30,12 @@ from .reset_phone import (
 __all__ = [
     'LoginUserWithUsernameDTO', 'LoginUserWithEmailDTO', 'LoginUserWithPhoneDTO',
 
-    'RegisterUserWithEmailDTO', 'RegisterUserWithPhoneDTO',
+    'RegisterUserWithEmailDTO', 'VerifyUserWithEmailGetCodeDTO', 'VerifyUserWithEmailSetCodeDTO',
+    'RegisterUserWithPhoneDTO', 'VerifyUserWithPhoneGetCodeDTO', 'VerifyUserWithPhoneSetCodeDTO',
 
-    'ResetMailGetCodeDTO', 'ResetMailSetCodeDTO',
+    'ResetEmailGetCodeDTO', 'ResetEmailSetCodeDTO',
 
-    'ResetPasswordWithMailGetCodeDTO', 'ResetPasswordWithMailSetCodeDTO',
+    'ResetPasswordWithEmailGetCodeDTO', 'ResetPasswordWithEmailSetCodeDTO',
     'ResetPasswordWithPhoneGetCodeDTO', 'ResetPasswordWithPhoneSetCodeDTO',
 
     'ResetPhoneGetCodeDTO', 'ResetPhoneSetCodeDTO'

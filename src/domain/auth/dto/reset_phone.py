@@ -4,7 +4,6 @@ from phonenumbers import parse
 
 class ResetPhoneGetCodeDTO(BaseModel):
     phone: str
-    old_password: str
 
     @field_validator('phone')
     def validate_phone(cls, v):
@@ -15,7 +14,7 @@ class ResetPhoneGetCodeDTO(BaseModel):
 class ResetPhoneSetCodeDTO(BaseModel):
     phone: str
     code: str
-    new_password: str
+    hew_phone: str
 
     @field_validator('phone')
     def validate_phone(cls, v):
