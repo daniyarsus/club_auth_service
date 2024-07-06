@@ -37,12 +37,11 @@ class RegisterUserWithEmailUseCase:
                     detail='Email already registered!'  # ToDo: изменить на свои статусы
                 )
             else:
-                result = await self.sql_user_repository.add_one(
+                await self.sql_user_repository.add_one(
                     email=dto.email,
                     username=dto.username,
                     password=dto.password
                 )
-                return result
         except BaseException as exception:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -70,12 +69,11 @@ class VerifyUserWithEmailGetCodeUseCase:
             )
             if existing_user_with_email:
                 if not existing_user_with_email.is_verified:
-                    result = await self.redis_auth_repository.set_one(
+                    await self.redis_auth_repository.set_one(
                         key=f"email_verify_token_of_{dto.email}",
                         value=random.randint(a=1, b=999999),
                         time_in_sec=120
                     )
-                    return result
                 else:
                     raise HTTPException(
                         status_code=status.HTTP_400_BAD_REQUEST,
@@ -117,15 +115,13 @@ class VerifyUserWithEmailSetCodeUseCase:
                         key=f"email_verify_token_of_{dto.email}",
                     )
                     if check_user_code:
-                        user_verify = await self.sql_user_repository.edit_one(
+                        await self.sql_user_repository.edit_one(
                             {"is_verified": True},
                             email=dto.email
                         )
-                        delete_token = await self.redis_auth_repository.delete_one(
+                        await self.redis_auth_repository.delete_one(
                             key=f"email_verify_token_of_{dto.email}"
                         )
-                        result = user_verify, delete_token
-                        return result
                     else:
                         raise HTTPException(
                             status_code=status.HTTP_400_BAD_REQUEST,

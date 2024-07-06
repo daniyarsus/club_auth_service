@@ -4,13 +4,13 @@ from abc import ABC, abstractmethod
 
 class LoginUserInterface(ABC):
     @abstractmethod
-    async def authenticate_with_username(self, username: str, password: str) -> NoReturn:
+    async def authenticate_with_username(self, dto: dict) -> NoReturn:
         raise NotImplementedError
 
     @abstractmethod
-    async def authenticate_with_email(self, email: str, password: str) -> NoReturn:
+    async def authenticate_with_email(self, dto: dict) -> NoReturn:
         raise NotImplementedError
 
     @abstractmethod
-    async def authenticate_with_phone(self, phone: str, password: str) -> NoReturn:
+    async def authenticate_with_phone(self, dto: dict) -> NoReturn:
         raise NotImplementedError

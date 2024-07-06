@@ -27,7 +27,7 @@ class User(SQLAlchemyBase):
         String, nullable=False
     )
     is_verified: Mapped[bool] = mapped_column(
-        Boolean, index=True, nullable=False
+        Boolean, index=True, default=False
     )
 
     created_at: Mapped[datetime] = mapped_column(

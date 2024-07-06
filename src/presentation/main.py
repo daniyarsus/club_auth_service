@@ -2,6 +2,8 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.presentation.api.controllers import setup_controllers
+
 
 def build_app() -> FastAPI:
     app = FastAPI(
@@ -21,6 +23,8 @@ def build_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    setup_controllers(app.router)
 
     return app
 
