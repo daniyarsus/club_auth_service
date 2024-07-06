@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Integer, String, TIMESTAMP
+from sqlalchemy import Integer, String, TIMESTAMP, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, validates
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -25,6 +25,9 @@ class User(SQLAlchemyBase):
     )
     password: Mapped[str] = mapped_column(
         String, nullable=False
+    )
+    is_verified: Mapped[bool] = mapped_column(
+        Boolean, index=True, nullable=False
     )
 
     created_at: Mapped[datetime] = mapped_column(
