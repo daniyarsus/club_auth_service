@@ -1,3 +1,5 @@
+from typing import override, NoReturn
+
 from injector import inject, singleton
 
 from src.domain.auth.interfaces import LoginUserInterface
@@ -23,3 +25,15 @@ class LoginUserService(LoginUserInterface):
         self.sql_user_repository = sql_user_repository
         self.redis_auth_repository = redis_auth_repository
         self.jwt_auth_repository = jwt_auth_repository
+
+    @override
+    async def authenticate_with_username(self, dto: dict):
+        pass
+
+    @override
+    async def authenticate_with_email(self, dto: dict):
+        pass
+
+    @override
+    async def authenticate_with_phone(self, dto: dict):
+        pass
