@@ -16,16 +16,10 @@ from src.infrastructure.smtp.sms.repositories import *
 
 class RegisterUserWithEmailUseCase:
     @inject
-    def __init__(
-            self,
-            sql_user_repository: AbstractSQLUserRepository
-    ) -> None:
+    def __init__(self, sql_user_repository: AbstractSQLUserRepository) -> None:
         self.sql_user_repository = sql_user_repository
 
-    async def __call__(
-            self,
-            dto: RegisterUserWithEmailDTO
-    ):
+    async def __call__(self, dto: RegisterUserWithEmailDTO):
         try:
             existing_user = await self.sql_user_repository.get_one(
                 email=dto.email,
@@ -34,7 +28,7 @@ class RegisterUserWithEmailUseCase:
             if existing_user:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail='Email already registered!'  # ToDo: изменить на свои статусы
+                    detail='Email or Username already registered!'
                 )
             else:
                 await self.sql_user_repository.add_one(
@@ -42,7 +36,8 @@ class RegisterUserWithEmailUseCase:
                     username=dto.username,
                     password=dto.password
                 )
-        except BaseException as exception:
+        except Exception as exception:
+            print(f"Exception during user registration: {str(exception)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=str(exception)
@@ -71,7 +66,7 @@ class VerifyUserWithEmailGetCodeUseCase:
                 if not existing_user_with_email.is_verified:
                     await self.redis_auth_repository.set_one(
                         key=f"email_verify_token_of_{dto.email}",
-                        value=random.randint(a=1, b=999999),
+                        value=f"{random.randint(a=111111, b=999999)}",
                         time_in_sec=120
                     )
                 else:
@@ -85,10 +80,11 @@ class VerifyUserWithEmailGetCodeUseCase:
                     detail='User not registered!'
                 )
         except BaseException as exception:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=str(exception)
-            )
+            #raise HTTPException(
+            #    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            #    detail=str(exception)
+            #)
+            raise exception
 
 
 class VerifyUserWithEmailSetCodeUseCase:
@@ -102,8 +98,8 @@ class VerifyUserWithEmailSetCodeUseCase:
         self.redis_auth_repository = redis_auth_repository
 
     async def __call__(
-        self,
-        dto: VerifyUserWithEmailSetCodeDTO
+            self,
+            dto: VerifyUserWithEmailSetCodeDTO
     ):
         try:
             existing_user_with_email = await self.sql_user_repository.get_one(
@@ -114,7 +110,7 @@ class VerifyUserWithEmailSetCodeUseCase:
                     check_user_code = await self.redis_auth_repository.get_one(
                         key=f"email_verify_token_of_{dto.email}",
                     )
-                    if check_user_code:
+                    if check_user_code.decode('utf-8') == dto.code:
                         await self.sql_user_repository.edit_one(
                             {"is_verified": True},
                             email=dto.email

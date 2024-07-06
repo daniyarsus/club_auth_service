@@ -1,12 +1,11 @@
 from typing import override
 
 from injector import inject, singleton
-from redis.client import AbstractRedis
 
 from src.domain.auth.interfaces import RegisterUserInterface
 from src.domain.auth.dto import (
-    RegisterUserWithEmailDTO, VerifyUserWithEmailGetCodeDTO, VerifyUserWithEmailSetCodeDTO, RegisterUserWithPhoneDTO,
-    VerifyUserWithPhoneSetCodeDTO
+    RegisterUserWithEmailDTO, VerifyUserWithEmailGetCodeDTO, VerifyUserWithEmailSetCodeDTO,
+    RegisterUserWithPhoneDTO, VerifyUserWithPhoneGetCodeDTO, VerifyUserWithPhoneSetCodeDTO,
 )
 from src.domain.auth.usecases import (
     RegisterUserWithEmailUseCase, VerifyUserWithEmailGetCodeUseCase, VerifyUserWithEmailSetCodeUseCase
@@ -14,6 +13,10 @@ from src.domain.auth.usecases import (
 from src.infrastructure.db.postgres_db.repositories import (
     AbstractSQLUserRepository
 )
+from src.infrastructure.db.redis_db.repositories import (
+    AbstractRedisAuthRepository
+)
+from src.infrastructure.smtp.email.repositories import *
 
 
 @singleton
@@ -22,7 +25,7 @@ class RegisterUserService(RegisterUserInterface):
     def __init__(
             self,
             sql_user_repository: AbstractSQLUserRepository,
-            redis_auth_repository: AbstractSQLUserRepository
+            redis_auth_repository: AbstractRedisAuthRepository
     ) -> None:
         self.sql_user_repository = sql_user_repository
         self.redis_auth_repository = redis_auth_repository
@@ -30,8 +33,7 @@ class RegisterUserService(RegisterUserInterface):
     @override
     async def register_user_with_email(self, dto: RegisterUserWithEmailDTO):
         use_case = RegisterUserWithEmailUseCase(
-            sql_user_repository=self.sql_user_repository,
-            redis_auth_repository=self.redis_auth_repository
+            sql_user_repository=self.sql_user_repository
         )
         return await use_case(
             dto=dto
@@ -62,7 +64,7 @@ class RegisterUserService(RegisterUserInterface):
         pass
 
     @override
-    async def get_phone_code_verify_user(self, dto: VerifyUserWithEmailGetCodeDTO):
+    async def get_phone_code_verify_user(self, dto: VerifyUserWithPhoneGetCodeDTO):
         pass
 
     @override

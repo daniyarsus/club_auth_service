@@ -9,6 +9,6 @@ from src.infrastructure.tokens.jwt.repositories import AbstractAuthJWTRepository
 
 def config(binder):
     binder.bind(interface=RegisterUserInterface, to=RegisterUserService, scope=singleton),
-    binder.bind(interface=SQLUserRepository, to=SQLUserRepository, scope=singleton),
-    binder.bind(interface=RedisAuthRepository, to=RedisAuthRepository, scope=singleton),
-    binder.bind(interface=AbstractAuthJWTRepository, to=AbstractAuthJWTRepository, scope=singleton)
+    binder.bind(interface=AbstractSQLUserRepository, to=SQLUserRepository, scope=singleton),
+    binder.bind(interface=AbstractRedisAuthRepository, to=RedisAuthRepository, scope=singleton),
+    binder.bind(interface=AbstractAuthJWTRepository, to=AuthJWTRepository, scope=singleton)

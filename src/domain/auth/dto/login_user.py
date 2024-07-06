@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, field_validator, ValidationError
+from pydantic import BaseModel, EmailStr, validator
 from phonenumbers import parse
 
 
@@ -6,10 +6,10 @@ class LoginUserWithUsernameDTO(BaseModel):
     username: str
     password: str
 
-    @field_validator('username')
+    @validator('username')
     def validate_username(cls, v):
         if len(v) <= 1:
-            raise ValidationError('Username must be at least 1 character!')
+            raise ValueError('Username must be at least 1 character!')
 
 
 class LoginUserWithEmailDTO(BaseModel):
@@ -21,7 +21,7 @@ class LoginUserWithPhoneDTO(BaseModel):
     phone: str
     password: str
 
-    @field_validator('phone')
+    @validator('phone')
     def validate_phone(cls, v):
         if not parse(v):
-            raise ValidationError('Phone number must be entered in the format: +999999999!')
+            raise ValueError('Phone number must be entered in the format: +999999999!')

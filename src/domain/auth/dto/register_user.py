@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, field_validator, ValidationError
+from pydantic import BaseModel, EmailStr, validator
 from phonenumbers import parse
 
 
@@ -7,10 +7,11 @@ class RegisterUserWithEmailDTO(BaseModel):
     username: str
     password: str
 
-    @field_validator('username')
+    @validator('username')
     def validate_username(cls, v):
         if len(v) <= 3:
-            raise ValidationError('Username must be at least 1 character!')
+            raise ValueError('Username must be at least 4 characters long!')
+        return v
 
 
 class VerifyUserWithEmailGetCodeDTO(BaseModel):
@@ -21,10 +22,11 @@ class VerifyUserWithEmailSetCodeDTO(BaseModel):
     email: EmailStr
     code: str
 
-    @field_validator('code')
+    @validator('code')
     def validate_code(cls, v):
         if len(v) != 6:
-            raise ValidationError('Code must be 6 digits!')
+            raise ValueError('Code must be 6 digits!')
+        return v
 
 
 class RegisterUserWithPhoneDTO(BaseModel):
@@ -32,35 +34,35 @@ class RegisterUserWithPhoneDTO(BaseModel):
     username: str
     password: str
 
-    @field_validator('phone')
+    @validator('phone')
     def validate_phone(cls, v):
         if not parse(v):
-            raise ValidationError('Phone number must be entered in the format: +999999999!')
+            raise ValueError('Phone number must be entered in the format: +999999999!')
 
-    @field_validator('username')
+    @validator('username')
     def validate_username(cls, v):
         if len(v) <= 3:
-            raise ValidationError('Username must be at least 1 character!')
+            raise ValueError('Username must be at least 1 character!')
 
 
 class VerifyUserWithPhoneGetCodeDTO(BaseModel):
     phone: str
 
-    @field_validator('phone')
+    @validator('phone')
     def validate_phone(cls, v):
         if not parse(v):
-            raise ValidationError('Phone number must be entered in the format: +999999999!')
+            raise ValueError('Phone number must be entered in the format: +999999999!')
 
 
 class VerifyUserWithPhoneSetCodeDTO(BaseModel):
     phone: str
     code: str
 
-    @field_validator('phone')
+    @validator('phone')
     def validate_phone(cls, v):
         if not parse(v):
-            raise ValidationError('Phone number must be entered in the format: +999999999!')
-    @field_validator('code')
+            raise ValueError('Phone number must be entered in the format: +999999999!')
+    @validator('code')
     def validate_code(cls, v):
         if len(v) != 6:
-            raise ValidationError('Code must be 6 digits!')
+            raise ValueError('Code must be 6 digits!')

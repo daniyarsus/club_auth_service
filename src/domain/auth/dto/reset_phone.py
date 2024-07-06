@@ -1,14 +1,14 @@
-from pydantic import BaseModel, field_validator, ValidationError
+from pydantic import BaseModel, validator
 from phonenumbers import parse
 
 
 class ResetPhoneGetCodeDTO(BaseModel):
     phone: str
 
-    @field_validator('phone')
+    @validator('phone')
     def validate_phone(cls, v):
         if not parse(v):
-            raise ValidationError('Phone number must be entered in the format: +999999999!')
+            raise ValueError('Phone number must be entered in the format: +999999999!')
 
 
 class ResetPhoneSetCodeDTO(BaseModel):
@@ -16,12 +16,12 @@ class ResetPhoneSetCodeDTO(BaseModel):
     code: str
     hew_phone: str
 
-    @field_validator('phone')
+    @validator('phone')
     def validate_phone(cls, v):
         if not parse(v):
-            raise ValidationError('Phone number must be entered in the format: +999999999!')
+            raise ValueError('Phone number must be entered in the format: +999999999!')
 
-    @field_validator('code')
+    @validator('code')
     def validate_code(cls, v):
         if len(v) != 6:
-            raise ValidationError('Code must be 6 digits!')
+            raise ValueError('Code must be 6 digits!')

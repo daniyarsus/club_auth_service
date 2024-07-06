@@ -30,3 +30,7 @@ sync_session = sessionmaker(
     expire_on_commit=False,
     autocommit=False,
 )
+
+
+from src.infrastructure.db.postgres_db.models.base import SQLAlchemyBase
+#SQLAlchemyBase.metadata.create_all(bind=sync_engine)
