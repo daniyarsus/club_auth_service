@@ -1,7 +1,8 @@
 from datetime import datetime
 
 from sqlalchemy import Integer, String, TIMESTAMP
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, validates
+from sqlalchemy.exc import SQLAlchemyError
 
 from .base import SQLAlchemyBase
 
@@ -14,10 +15,10 @@ class User(SQLAlchemyBase):
     )
 
     email: Mapped[str] = mapped_column(
-        String, index=True, unique=True, nullable=False
+        String, index=True, unique=True, nullable=True
     )
     phone: Mapped[str] = mapped_column(
-        String, index=True, unique=True, nullable=False
+        String, index=True, unique=True, nullable=True
     )
     username: Mapped[str] = mapped_column(
         String, index=True, unique=True, nullable=False
@@ -32,3 +33,11 @@ class User(SQLAlchemyBase):
     updated_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True), nullable=True, onupdate=datetime.now()
     )
+
+    @validates('email', 'phone')
+    def validate_email_or_phone(self, key, value):
+        if key == 'email' and not value and not self.phone:
+            raise SQLAlchemyError("Either email or phone must be provided")
+        if key == 'phone' and not value and not self.email:
+            raise SQLAlchemyError("Either email or phone must be provided")
+        return value

@@ -7,7 +7,7 @@ from src.domain.auth.usecases import (
 
 )
 from src.infrastructure.db.postgres_db.repositories import (
-    AbstractUserRepository
+    AbstractSQLUserRepository
 )
 
 
@@ -16,7 +16,7 @@ class RegisterUserService(RegisterUserInterface):
     @inject
     def __init__(
             self,
-            user_repo: AbstractUserRepository
+            user_repo: AbstractSQLUserRepository
     ) -> None:
         self.user_repo = user_repo
 

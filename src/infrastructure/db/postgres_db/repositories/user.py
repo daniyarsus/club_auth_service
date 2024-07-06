@@ -4,7 +4,7 @@ from .base import SQLAbstractRepository, SQLAlchemyRepository
 from src.infrastructure.db.postgres_db.models import User
 
 
-class AbstractUserRepository(SQLAbstractRepository):
+class AbstractSQLUserRepository(SQLAbstractRepository):
     @override
     async def add_one(self, **data) -> NoReturn:
         raise NotImplementedError
@@ -38,5 +38,5 @@ class AbstractUserRepository(SQLAbstractRepository):
         raise NotImplementedError
 
 
-class UserRepository(SQLAlchemyRepository):
+class SQLUserRepository(SQLAlchemyRepository):
     model = User

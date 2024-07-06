@@ -1,6 +1,6 @@
-from .user import AbstractUserRepository, UserRepository
+from .user import AbstractSQLUserRepository, SQLUserRepository
 
 
 __all__ = [
-    'AbstractUserRepository', 'UserRepository'
+    'AbstractSQLUserRepository', 'SQLUserRepository'
 ]
