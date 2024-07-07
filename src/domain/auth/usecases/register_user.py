@@ -10,7 +10,7 @@ from src.domain.auth.dto import (
 from src.domain.auth.exceptions import *
 from src.infrastructure.db.postgres_db.repositories import AbstractSQLUserRepository
 from src.infrastructure.db.redis_db.repositories import AbstractRedisAuthRepository
-from src.infrastructure.smtp.email.repositories import *
+from src.infrastructure.smtp.email.repositories import AbstractAuthSMTPEmailRepository
 from src.infrastructure.smtp.sms.repositories import *
 
 
@@ -49,10 +49,12 @@ class VerifyUserWithEmailGetCodeUseCase:
     def __init__(
             self,
             sql_user_repository: AbstractSQLUserRepository,
-            redis_auth_repository: AbstractRedisAuthRepository
+            redis_auth_repository: AbstractRedisAuthRepository,
+            auth_smtp_email_repository: AbstractAuthSMTPEmailRepository,
     ) -> None:
         self.sql_user_repository = sql_user_repository
         self.redis_auth_repository = redis_auth_repository
+        self.auth_smtp_email_repository = auth_smtp_email_repository
 
     async def __call__(
             self,
@@ -64,11 +66,18 @@ class VerifyUserWithEmailGetCodeUseCase:
             )
             if existing_user_with_email:
                 if not existing_user_with_email.is_verified:
+                    random_code = random.randint(a=111111, b=999999)
+                    await self.auth_smtp_email_repository.send_message(
+                        message=f"Verify code: {random_code}. Don't reply him to another!",
+                        to=dto.email,
+                        subject="Your verify code!"
+                    )
                     await self.redis_auth_repository.set_one(
                         key=f"email_verify_token_of_{dto.email}",
-                        value=f"{random.randint(a=111111, b=999999)}",
+                        value=f"{random_code}",
                         time_in_sec=120
                     )
+                    print(random_code)
                 else:
                     raise HTTPException(
                         status_code=status.HTTP_400_BAD_REQUEST,

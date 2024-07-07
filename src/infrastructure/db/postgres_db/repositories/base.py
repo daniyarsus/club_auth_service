@@ -1,9 +1,11 @@
-from typing import NoReturn, Optional, List, Any, override
+from typing import NoReturn, Optional, List, Any, TypeVar, Type, override
 from abc import ABC, abstractmethod
 
 from sqlalchemy import delete, update, insert
 from sqlalchemy.future import select
 from src.infrastructure.db.postgres_db.settings import async_session
+
+T = TypeVar('T')
 
 
 class SQLAbstractRepository(ABC):
@@ -33,7 +35,7 @@ class SQLAbstractRepository(ABC):
 
 
 class SQLAlchemyRepository(SQLAbstractRepository):
-    model = None
+    model: Type[T] = None
 
     @override
     async def add_one(self, **data) -> Optional[Any]:

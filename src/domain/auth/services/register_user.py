@@ -16,7 +16,9 @@ from src.infrastructure.db.postgres_db.repositories import (
 from src.infrastructure.db.redis_db.repositories import (
     AbstractRedisAuthRepository
 )
-from src.infrastructure.smtp.email.repositories import *
+from src.infrastructure.smtp.email.repositories import (
+    AbstractAuthSMTPEmailRepository
+)
 
 
 @singleton
@@ -25,10 +27,12 @@ class RegisterUserService(RegisterUserInterface):
     def __init__(
             self,
             sql_user_repository: AbstractSQLUserRepository,
-            redis_auth_repository: AbstractRedisAuthRepository
+            redis_auth_repository: AbstractRedisAuthRepository,
+            auth_smtp_email_repository: AbstractAuthSMTPEmailRepository
     ) -> None:
         self.sql_user_repository = sql_user_repository
         self.redis_auth_repository = redis_auth_repository
+        self.auth_smtp_email_repository = auth_smtp_email_repository
 
     @override
     async def register_user_with_email(self, dto: RegisterUserWithEmailDTO):
@@ -43,7 +47,8 @@ class RegisterUserService(RegisterUserInterface):
     async def get_email_code_verify_user(self, dto: VerifyUserWithEmailGetCodeDTO):
         use_case = VerifyUserWithEmailGetCodeUseCase(
             sql_user_repository=self.sql_user_repository,
-            redis_auth_repository=self.redis_auth_repository
+            redis_auth_repository=self.redis_auth_repository,
+            auth_smtp_email_repository=self.auth_smtp_email_repository
         )
         return await use_case(
             dto=dto

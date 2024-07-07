@@ -5,10 +5,12 @@ from src.domain.auth.services import RegisterUserService
 from src.infrastructure.db.postgres_db.repositories import AbstractSQLUserRepository, SQLUserRepository
 from src.infrastructure.db.redis_db.repositories import AbstractRedisAuthRepository, RedisAuthRepository
 from src.infrastructure.tokens.jwt.repositories import AbstractAuthJWTRepository, AuthJWTRepository
+from src.infrastructure.smtp.email.repositories import AbstractAuthSMTPEmailRepository, AuthSMTPEmailRepository
 
 
 def config(binder):
     binder.bind(interface=RegisterUserInterface, to=RegisterUserService, scope=singleton),
     binder.bind(interface=AbstractSQLUserRepository, to=SQLUserRepository, scope=singleton),
     binder.bind(interface=AbstractRedisAuthRepository, to=RedisAuthRepository, scope=singleton),
-    binder.bind(interface=AbstractAuthJWTRepository, to=AuthJWTRepository, scope=singleton)
+    binder.bind(interface=AbstractAuthJWTRepository, to=AuthJWTRepository, scope=singleton),
+    binder.bind(interface=AbstractAuthSMTPEmailRepository, to=AuthSMTPEmailRepository, scope=singleton)

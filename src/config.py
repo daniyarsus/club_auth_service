@@ -11,9 +11,9 @@ class Settings(BaseSettings):
     POSTGRES_NAME: str
 
     REDIS_USER: str
-    REDIS_HOST: str
     REDIS_PORT: str
     REDIS_PASS: str
+    REDIS_DB: str
 
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str
@@ -30,4 +30,3 @@ class Settings(BaseSettings):
 
 
 settings: Settings = Settings()
-

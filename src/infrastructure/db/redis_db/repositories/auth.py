@@ -1,8 +1,11 @@
 from typing import Any, override, NoReturn
 
+from injector import singleton
+
 from .base import RedisAbstractRepository, RedisRepository
 
 
+@singleton
 class AbstractRedisAuthRepository(RedisAbstractRepository):
     @override
     async def set_one(self, key: Any, value: Any, time_in_sec: int) -> NoReturn:

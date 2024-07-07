@@ -1,9 +1,12 @@
 from typing import NoReturn, override
 
+from injector import singleton
+
 from .base import SQLAbstractRepository, SQLAlchemyRepository
 from src.infrastructure.db.postgres_db.models import User
 
 
+@singleton
 class AbstractSQLUserRepository(SQLAbstractRepository):
     @override
     async def add_one(self, **data) -> NoReturn:
@@ -38,5 +41,6 @@ class AbstractSQLUserRepository(SQLAbstractRepository):
         raise NotImplementedError
 
 
+@singleton
 class SQLUserRepository(SQLAlchemyRepository):
     model = User

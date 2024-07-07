@@ -34,6 +34,6 @@ if __name__ == "__main__":
         app="src.presentation.main:build_app",
         factory=True,
         host="0.0.0.0",
-        port=8000,
+        port=7000,
         workers=1
     )
