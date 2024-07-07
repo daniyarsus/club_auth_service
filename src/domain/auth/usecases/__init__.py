@@ -1,4 +1,8 @@
-from .login_user import *
+from .login_user import (
+    AuthenticateWithUsernameUseCase,
+    AuthenticateWithEmailUseCase,
+    AuthenticateWithPhoneUseCase
+)
 from .register_user import (
     RegisterUserWithEmailUseCase,
     VerifyUserWithEmailGetCodeUseCase,
@@ -7,5 +11,6 @@ from .register_user import (
 
 
 __all__ = [
+    'AuthenticateWithUsernameUseCase', 'AuthenticateWithEmailUseCase', 'AuthenticateWithPhoneUseCase',
     'RegisterUserWithEmailUseCase', 'VerifyUserWithEmailGetCodeUseCase', 'VerifyUserWithEmailSetCodeUseCase'
 ]

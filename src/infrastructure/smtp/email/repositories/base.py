@@ -26,10 +26,10 @@ class SMTPEmailRepository(AbstractSMTPEmailRepository):
         msg['From'] = SMTP_EMAIL_FROM
         msg['To'] = to
         msg['Subject'] = subject
-        msg.attach(MIMEText(message, 'plain', 'utf-8'))
+        msg.attach(MIMEText(_text=message, _subtype='plain', _charset='utf-8'))
 
         server = smtplib.SMTP(SMTP_DOMAIN_NAME, SMTP_PORT)
         server.starttls()
-        server.login(SMTP_EMAIL_FROM, SMTP_API_KEY)
-        server.send_message(msg)
+        server.login(user=SMTP_EMAIL_FROM, password=SMTP_API_KEY)
+        server.send_message(msg=msg)
         server.quit()

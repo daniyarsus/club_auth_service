@@ -19,4 +19,4 @@ COPY . .
 EXPOSE 7000
 
 # Запускаем приложение с помощью uvicorn
-CMD uvicorn src.presentation.main:build_app --host=0.0.0.0 --port=7000
+CMD uvicorn src.presentation.main:build_app --host=0.0.0.0 --port=7000 --factory --workers=4

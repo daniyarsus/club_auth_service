@@ -16,7 +16,10 @@ from src.infrastructure.smtp.sms.repositories import *
 
 class RegisterUserWithEmailUseCase:
     @inject
-    def __init__(self, sql_user_repository: AbstractSQLUserRepository) -> None:
+    def __init__(
+            self,
+            sql_user_repository: AbstractSQLUserRepository
+    ) -> None:
         self.sql_user_repository = sql_user_repository
 
     async def __call__(self, dto: RegisterUserWithEmailDTO):

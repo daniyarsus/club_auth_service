@@ -8,6 +8,11 @@ from src.domain.auth.dto import (
     LoginUserWithEmailDTO,
     LoginUserWithPhoneDTO
 )
+from src.domain.auth.usecases import (
+    AuthenticateWithUsernameUseCase,
+    AuthenticateWithEmailUseCase,
+    AuthenticateWithPhoneUseCase
+)
 from src.infrastructure.db.postgres_db.repositories import AbstractSQLUserRepository
 from src.infrastructure.db.redis_db.repositories import AbstractRedisAuthRepository
 from src.infrastructure.tokens.jwt.repositories import AbstractAuthJWTRepository
@@ -20,20 +25,41 @@ class LoginUserService(LoginUserInterface):
             self,
             sql_user_repository: AbstractSQLUserRepository,
             redis_auth_repository: AbstractRedisAuthRepository,
-            jwt_auth_repository: AbstractAuthJWTRepository
+            auth_jwt_repository: AbstractAuthJWTRepository
     ) -> None:
         self.sql_user_repository = sql_user_repository
         self.redis_auth_repository = redis_auth_repository
-        self.jwt_auth_repository = jwt_auth_repository
+        self.auth_jwt_repository = auth_jwt_repository
 
     @override
-    async def authenticate_with_username(self, dto: dict):
-        pass
+    async def authenticate_with_username(self, dto: LoginUserWithUsernameDTO):
+        use_case = AuthenticateWithUsernameUseCase(
+            sql_user_repository=self.sql_user_repository,
+            redis_auth_repository=self.redis_auth_repository,
+            auth_jwt_repository=self.auth_jwt_repository
+        )
+        return await use_case(
+            dto=dto
+        )
 
     @override
     async def authenticate_with_email(self, dto: dict):
-        pass
+        use_case = AuthenticateWithEmailUseCase(
+            sql_user_repository=self.sql_user_repository,
+            redis_auth_repository=self.redis_auth_repository,
+            auth_jwt_repository=self.auth_jwt_repository
+        )
+        return await use_case(
+            dto=dto
+        )
 
     @override
     async def authenticate_with_phone(self, dto: dict):
-        pass
+        use_case = AuthenticateWithPhoneUseCase(
+            sql_user_repository=self.sql_user_repository,
+            redis_auth_repository=self.redis_auth_repository,
+            auth_jwt_repository=self.auth_jwt_repository
+        )
+        return await use_case(
+            dto=dto
+        )
