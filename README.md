@@ -12,5 +12,10 @@ Use cases:
 ***
 
 <h4>All questions for TG: @danyaKex</h4>
-
+```
+docker-compose down
+```
+```
+docker-compose up --build
+```
 ***

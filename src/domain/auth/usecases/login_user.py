@@ -214,7 +214,7 @@ class AuthenticateWithPhoneUseCase:
                         else:
                             raise HTTPException(
                                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                detail='Token not saved'
+                                detail='Token not saved!'
                             )
                     else:
                         raise HTTPException(
@@ -256,11 +256,11 @@ class GetRefreshTokenUseCase:
             payload: dict = await self.auth_jwt_repository.decode_token(
                 token=token
             )
-            session_id = payload.get('session_id')
             user_id = payload.get('user_id')
             email = payload.get('email')
             phone = payload.get('phone')
             username = payload.get('username')
+            session_id = payload.get('session_id')
 
             existing_token = await self.redis_auth_repository.get_one(
                 key=f"refresh_token_of_{session_id}"
