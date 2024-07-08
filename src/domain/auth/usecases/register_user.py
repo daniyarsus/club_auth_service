@@ -80,7 +80,7 @@ class VerifyUserWithEmailGetCodeUseCase:
                         value=f"{random_code}",
                         time_in_sec=120
                     )
-                    print(random_code)
+                    return random_code
                 else:
                     raise HTTPException(
                         status_code=status.HTTP_400_BAD_REQUEST,
