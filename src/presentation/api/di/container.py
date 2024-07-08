@@ -1,4 +1,4 @@
-from injector import Injector, singleton
+from injector import singleton
 
 from src.domain.auth.interfaces import RegisterUserInterface
 from src.domain.auth.services import RegisterUserService

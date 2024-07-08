@@ -1,35 +1,41 @@
-from fastapi import APIRouter, status, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.responses import JSONResponse
 
 from src.domain.auth.interfaces import LoginUserInterface
 from src.domain.auth.dto import (
     LoginUserWithUsernameDTO,
     LoginUserWithEmailDTO,
-    LoginUserWithPhoneDTO
+    LoginUserWithPhoneDTO,
+    GetRefreshTokenDTO
 )
 from src.presentation.api.di import injector
 
 router = APIRouter(prefix="/api/v1/auth/login", tags=["Login API endpoints."])
 
 
-@router.post("/authenticate-username")
-async def login_user(dto: OAuth2PasswordRequestForm = Depends()):
+@router.post("/username/authenticate")
+async def authenticate_with_username_endpoint(form_data: OAuth2PasswordRequestForm = Depends()):
     admin_auth_service = injector.get(LoginUserInterface)
-    result = await admin_auth_service.authenticate_with_username(dto=dto)
+    result = await admin_auth_service.authenticate_with_username(dto=form_data)
     return result
 
 
-@router.post("/authenticate-email")
-async def login_user(dto: LoginUserWithEmailDTO):
+@router.post("/email/authenticate")
+async def authenticate_with_email_endpoint(dto: LoginUserWithEmailDTO):
     admin_auth_service = injector.get(LoginUserInterface)
     result = await admin_auth_service.authenticate_with_email(dto=dto)
     return result
 
 
-@router.post("/authenticate-phone")
-async def login_user(dto: LoginUserWithPhoneDTO):
+@router.post("/phone/authenticate")
+async def authenticate_with_phone_endpoint(dto: LoginUserWithPhoneDTO):
     admin_auth_service = injector.get(LoginUserInterface)
     result = await admin_auth_service.authenticate_with_phone(dto=dto)
     return result
 
+
+@router.post("/refresh_token")
+async def get_refresh_token_endpoint(token: str):
+    admin_auth_service = injector.get(LoginUserInterface)
+    result = await admin_auth_service.get_refresh_token(token=token)
+    return result

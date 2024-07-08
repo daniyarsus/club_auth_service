@@ -6,12 +6,14 @@ from src.domain.auth.interfaces import LoginUserInterface
 from src.domain.auth.dto import (
     LoginUserWithUsernameDTO,
     LoginUserWithEmailDTO,
-    LoginUserWithPhoneDTO
+    LoginUserWithPhoneDTO,
+    GetRefreshTokenDTO
 )
 from src.domain.auth.usecases import (
     AuthenticateWithUsernameUseCase,
     AuthenticateWithEmailUseCase,
-    AuthenticateWithPhoneUseCase
+    AuthenticateWithPhoneUseCase,
+    GetRefreshTokenUseCase
 )
 from src.infrastructure.db.postgres_db.repositories import AbstractSQLUserRepository
 from src.infrastructure.db.redis_db.repositories import AbstractRedisAuthRepository
@@ -43,7 +45,7 @@ class LoginUserService(LoginUserInterface):
         )
 
     @override
-    async def authenticate_with_email(self, dto: dict):
+    async def authenticate_with_email(self, dto: LoginUserWithEmailDTO):
         use_case = AuthenticateWithEmailUseCase(
             sql_user_repository=self.sql_user_repository,
             redis_auth_repository=self.redis_auth_repository,
@@ -54,7 +56,7 @@ class LoginUserService(LoginUserInterface):
         )
 
     @override
-    async def authenticate_with_phone(self, dto: dict):
+    async def authenticate_with_phone(self, dto: LoginUserWithPhoneDTO):
         use_case = AuthenticateWithPhoneUseCase(
             sql_user_repository=self.sql_user_repository,
             redis_auth_repository=self.redis_auth_repository,
@@ -62,4 +64,14 @@ class LoginUserService(LoginUserInterface):
         )
         return await use_case(
             dto=dto
+        )
+
+    @override
+    async def get_refresh_token(self, token: str):
+        use_case = GetRefreshTokenUseCase(
+            redis_auth_repository=self.redis_auth_repository,
+            auth_jwt_repository=self.auth_jwt_repository
+        )
+        return await use_case(
+            token=token
         )

@@ -1,7 +1,8 @@
 from .login_user import (
     AuthenticateWithUsernameUseCase,
     AuthenticateWithEmailUseCase,
-    AuthenticateWithPhoneUseCase
+    AuthenticateWithPhoneUseCase,
+    GetRefreshTokenUseCase
 )
 from .register_user import (
     RegisterUserWithEmailUseCase,
@@ -12,5 +13,7 @@ from .register_user import (
 
 __all__ = [
     'AuthenticateWithUsernameUseCase', 'AuthenticateWithEmailUseCase', 'AuthenticateWithPhoneUseCase',
+    'GetRefreshTokenUseCase',
+
     'RegisterUserWithEmailUseCase', 'VerifyUserWithEmailGetCodeUseCase', 'VerifyUserWithEmailSetCodeUseCase'
 ]

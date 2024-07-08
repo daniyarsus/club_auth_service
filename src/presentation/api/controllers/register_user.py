@@ -12,7 +12,7 @@ from src.presentation.api.di import injector
 router = APIRouter(prefix="/api/v1/auth/register", tags=["Register API endpoints."])
 
 
-@router.post("/create-email-user")
+@router.post("/email/add-user")
 async def create_user_email_endpoint(dto: RegisterUserWithEmailDTO):
     try:
         register_user_service = injector.get(RegisterUserInterface)
@@ -22,11 +22,9 @@ async def create_user_email_endpoint(dto: RegisterUserWithEmailDTO):
             content={"message": "User created successfully."}
         )
     except HTTPException as e:
-        # Logging the exception for debugging
         print(f"HTTPException: {e.detail}")
         raise e
     except Exception as e:
-        # Logging any other exceptions
         print(f"Exception: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -34,7 +32,7 @@ async def create_user_email_endpoint(dto: RegisterUserWithEmailDTO):
         )
 
 
-@router.post("/send-email-verify-code")
+@router.post("/email/get-code")
 async def send_verify_email_code_endpoint(dto: VerifyUserWithEmailGetCodeDTO):
     register_user_service = injector.get(RegisterUserInterface)
     await register_user_service.get_email_code_verify_user(
@@ -46,7 +44,7 @@ async def send_verify_email_code_endpoint(dto: VerifyUserWithEmailGetCodeDTO):
     )
 
 
-@router.post("/send-email-verify-set-code")
+@router.post("/email/send-code")
 async def get_verify_email_code_endpoint(dto: VerifyUserWithEmailSetCodeDTO):
     register_user_service = injector.get(RegisterUserInterface)
     await register_user_service.set_email_code_verify_user(

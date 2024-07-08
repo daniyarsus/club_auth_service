@@ -3,7 +3,12 @@ import uuid
 from injector import inject
 from fastapi import HTTPException, status
 
-from src.domain.auth.dto import LoginUserWithUsernameDTO, LoginUserWithEmailDTO, LoginUserWithPhoneDTO
+from src.domain.auth.dto import (
+    LoginUserWithUsernameDTO,
+    LoginUserWithEmailDTO,
+    LoginUserWithPhoneDTO,
+    GetRefreshTokenDTO
+)
 from src.domain.auth.exceptions import *
 from src.infrastructure.db.postgres_db.repositories import AbstractSQLUserRepository
 from src.infrastructure.db.redis_db.repositories import AbstractRedisAuthRepository
@@ -35,12 +40,13 @@ class AuthenticateWithUsernameUseCase:
             if existing_user:
                 if existing_user.is_verified:
                     if existing_user.password == dto.password:
+                        session_id = str(uuid.uuid4())
                         data = {
                             "user_id": existing_user.id,
                             "email": existing_user.email,
                             "phone": existing_user.phone,
                             "username": existing_user.username,
-                            "session_id": str(uuid.uuid4())
+                            "session_id": session_id
                         }
                         access_token = await self.auth_jwt_repository.encode_token(
                             token_type="access",
@@ -50,12 +56,18 @@ class AuthenticateWithUsernameUseCase:
                             token_type="refresh",
                             data=data
                         )
-                        await self.redis_auth_repository.set_one(
-                            key="refresh_token",
+                        token_set = await self.redis_auth_repository.set_one(
+                            key=f"refresh_token_of_{session_id}",
                             value=refresh_token,
                             time_in_sec=getattr(jwt_settings, "JWT_REFRESH_TOKEN_EXPIRE_SECONDS")
                         )
-                        return {"access_token": access_token, "refresh_token": refresh_token}
+                        if token_set:
+                            return {"access_token": access_token, "refresh_token": refresh_token}
+                        else:
+                            raise HTTPException(
+                                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail='Token not saved'
+                            )
                     else:
                         raise HTTPException(
                             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -101,12 +113,13 @@ class AuthenticateWithEmailUseCase:
             if existing_user:
                 if existing_user.is_verified:
                     if existing_user.password == dto.password:
+                        session_id = str(uuid.uuid4())
                         data = {
                             "user_id": existing_user.id,
                             "email": existing_user.email,
                             "phone": existing_user.phone,
                             "username": existing_user.username,
-                            "session_id": str(uuid.uuid4())
+                            "session_id": session_id
                         }
                         access_token = await self.auth_jwt_repository.encode_token(
                             token_type="access",
@@ -116,12 +129,20 @@ class AuthenticateWithEmailUseCase:
                             token_type="refresh",
                             data=data
                         )
-                        await self.redis_auth_repository.set_one(
-                            key="refresh_token",
+                        token_set = await self.redis_auth_repository.set_one(
+                            key=f"refresh_token_of_{session_id}",
                             value=refresh_token,
                             time_in_sec=getattr(jwt_settings, "JWT_REFRESH_TOKEN_EXPIRE_SECONDS")
                         )
-                        return {"access_token": access_token, "refresh_token": refresh_token}
+                        if token_set:
+                            print(session_id)
+
+                            return {"access_token": access_token, "refresh_token": refresh_token}
+                        else:
+                            raise HTTPException(
+                                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail='Token not saved'
+                            )
                     else:
                         raise HTTPException(
                             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -167,12 +188,13 @@ class AuthenticateWithPhoneUseCase:
             if existing_user:
                 if existing_user.is_verified:
                     if existing_user.password == dto.password:
+                        session_id = str(uuid.uuid4())
                         data = {
                             "user_id": existing_user.id,
                             "email": existing_user.email,
                             "phone": existing_user.phone,
                             "username": existing_user.username,
-                            "session_id": str(uuid.uuid4())
+                            "session_id": session_id
                         }
                         access_token = await self.auth_jwt_repository.encode_token(
                             token_type="access",
@@ -182,12 +204,18 @@ class AuthenticateWithPhoneUseCase:
                             token_type="refresh",
                             data=data
                         )
-                        await self.redis_auth_repository.set_one(
-                            key="refresh_token",
+                        token_set = await self.redis_auth_repository.set_one(
+                            key=f"refresh_token_of_{session_id}",
                             value=refresh_token,
                             time_in_sec=getattr(jwt_settings, "JWT_REFRESH_TOKEN_EXPIRE_SECONDS")
                         )
-                        return {"access_token": access_token, "refresh_token": refresh_token}
+                        if token_set:
+                            return {"access_token": access_token, "refresh_token": refresh_token}
+                        else:
+                            raise HTTPException(
+                                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail='Token not saved'
+                            )
                     else:
                         raise HTTPException(
                             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -208,3 +236,65 @@ class AuthenticateWithPhoneUseCase:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=str(exception)
             )
+
+
+class GetRefreshTokenUseCase:
+    @inject
+    def __init__(
+            self,
+            redis_auth_repository: AbstractRedisAuthRepository,
+            auth_jwt_repository: AbstractAuthJWTRepository
+    ) -> None:
+        self.redis_auth_repository = redis_auth_repository
+        self.auth_jwt_repository = auth_jwt_repository
+
+    async def __call__(
+            self,
+            token: str
+    ):
+        try:
+            payload: dict = await self.auth_jwt_repository.decode_token(
+                token=token
+            )
+            session_id = payload.get('session_id')
+            user_id = payload.get('user_id')
+            email = payload.get('email')
+            phone = payload.get('phone')
+            username = payload.get('username')
+
+            existing_token = await self.redis_auth_repository.get_one(
+                key=f"refresh_token_of_{session_id}"
+            )
+            if existing_token:
+                check_token_type = payload.get('type')
+                if check_token_type == 'refresh':
+                    data = {
+                        "user_id": user_id,
+                        "email": email,
+                        "phone": phone,
+                        "username": username,
+                        "session_id": session_id,
+                    }
+                    access_token = await self.auth_jwt_repository.encode_token(
+                        token_type='access',
+                        data=data
+                    )
+                    return {
+                        'access_token': access_token
+                    }
+                else:
+                    raise HTTPException(
+                        status_code=status.HTTP_401_UNAUTHORIZED,
+                        detail='Token type not allowed!'
+                    )
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail='Token not found!'
+                )
+        except BaseException as exception:
+            #raise HTTPException(
+            #    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            #    detail=str(exception)
+            #)
+            raise exception

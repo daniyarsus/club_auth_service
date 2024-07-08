@@ -14,3 +14,7 @@ class LoginUserInterface(ABC):
     @abstractmethod
     async def authenticate_with_phone(self, dto: dict) -> NoReturn:
         raise NotImplementedError
+
+    @abstractmethod
+    async def get_refresh_token(self, token: str) -> NoReturn:
+        raise NotImplementedError

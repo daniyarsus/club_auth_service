@@ -15,7 +15,7 @@ from src.infrastructure.smtp.email.settings import (
 
 class AbstractSMTPEmailRepository(ABC):
     @abstractmethod
-    async def send_message(self, message: str, to: str, subject: str):
+    async def send_message(self, message: str, to: str, subject: str) -> NoReturn:
         raise NotImplementedError
 
 

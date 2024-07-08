@@ -25,3 +25,12 @@ class LoginUserWithPhoneDTO(BaseModel):
     def validate_phone(cls, v):
         if not parse(v):
             raise ValueError('Phone number must be entered in the format: +999999999!')
+
+
+class GetRefreshTokenDTO(BaseModel):
+    token: str
+
+    @validator('token')
+    def validate_token(cls, v):
+        if len(v) <= 1:
+            raise ValueError('Token must be at least 1 character!')

@@ -1,7 +1,8 @@
 from .login_user import (
     LoginUserWithUsernameDTO,
     LoginUserWithEmailDTO,
-    LoginUserWithPhoneDTO
+    LoginUserWithPhoneDTO,
+    GetRefreshTokenDTO
 )
 from .register_user import (
     RegisterUserWithEmailDTO,
@@ -28,7 +29,7 @@ from .reset_phone import (
 
 
 __all__ = [
-    'LoginUserWithUsernameDTO', 'LoginUserWithEmailDTO', 'LoginUserWithPhoneDTO',
+    'LoginUserWithUsernameDTO', 'LoginUserWithEmailDTO', 'LoginUserWithPhoneDTO', 'GetRefreshTokenDTO',
 
     'RegisterUserWithEmailDTO', 'VerifyUserWithEmailGetCodeDTO', 'VerifyUserWithEmailSetCodeDTO',
     'RegisterUserWithPhoneDTO', 'VerifyUserWithPhoneGetCodeDTO', 'VerifyUserWithPhoneSetCodeDTO',
