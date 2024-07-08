@@ -29,6 +29,9 @@ services:
       - "${REDIS_PORT}:${REDIS_PORT}"
     environment:
       REDIS_PASSWORD: ${REDIS_PASS}
+    volumes:
+      - redis_data:/data
 
 volumes:
   postgres_data:
+  redis_data:

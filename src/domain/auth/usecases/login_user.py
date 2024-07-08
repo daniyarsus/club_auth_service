@@ -1,4 +1,5 @@
 import uuid
+from typing import Dict
 
 from injector import inject
 from fastapi import HTTPException, status
@@ -32,7 +33,7 @@ class AuthenticateWithUsernameUseCase:
     async def __call__(
             self,
             dto: LoginUserWithUsernameDTO
-    ):
+    ) -> Dict[str, str]:
         try:
             existing_user = await self.sql_user_repository.get_one(
                 username=dto.username
@@ -105,7 +106,7 @@ class AuthenticateWithEmailUseCase:
     async def __call__(
             self,
             dto: LoginUserWithEmailDTO
-    ):
+    ) -> Dict[str, str]:
         try:
             existing_user = await self.sql_user_repository.get_one(
                 email=dto.email
@@ -135,8 +136,6 @@ class AuthenticateWithEmailUseCase:
                             time_in_sec=getattr(jwt_settings, "JWT_REFRESH_TOKEN_EXPIRE_SECONDS")
                         )
                         if token_set:
-                            print(session_id)
-
                             return {"access_token": access_token, "refresh_token": refresh_token}
                         else:
                             raise HTTPException(
@@ -180,7 +179,7 @@ class AuthenticateWithPhoneUseCase:
     async def __call__(
             self,
             dto: LoginUserWithPhoneDTO
-    ):
+    ) -> Dict[str, str]:
         try:
             existing_user = await self.sql_user_repository.get_one(
                 phone=dto.phone
@@ -251,7 +250,7 @@ class GetRefreshTokenUseCase:
     async def __call__(
             self,
             token: str
-    ):
+    ) -> Dict[str, str]:
         try:
             payload: dict = await self.auth_jwt_repository.decode_token(
                 token=token
@@ -293,8 +292,7 @@ class GetRefreshTokenUseCase:
                     detail='Token not found!'
                 )
         except BaseException as exception:
-            #raise HTTPException(
-            #    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            #    detail=str(exception)
-            #)
-            raise exception
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=str(exception)
+            )

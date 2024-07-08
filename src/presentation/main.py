@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_utilities import add_timer_middleware
 
 from src.presentation.api.controllers import setup_controllers
 
@@ -25,6 +26,8 @@ def build_app() -> FastAPI:
     )
 
     setup_controllers(app.router)
+
+    add_timer_middleware(app, show_avg=True)
 
     return app
 

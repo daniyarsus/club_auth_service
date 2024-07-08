@@ -22,7 +22,10 @@ class RegisterUserWithEmailUseCase:
     ) -> None:
         self.sql_user_repository = sql_user_repository
 
-    async def __call__(self, dto: RegisterUserWithEmailDTO):
+    async def __call__(
+            self,
+            dto: RegisterUserWithEmailDTO
+    ) -> None:
         try:
             existing_user = await self.sql_user_repository.get_one(
                 email=dto.email,
@@ -40,7 +43,6 @@ class RegisterUserWithEmailUseCase:
                     password=dto.password
                 )
         except Exception as exception:
-            print(f"Exception during user registration: {str(exception)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=str(exception)
@@ -62,7 +64,7 @@ class VerifyUserWithEmailGetCodeUseCase:
     async def __call__(
             self,
             dto: VerifyUserWithEmailGetCodeDTO
-    ):
+    ) -> None:
         try:
             existing_user_with_email = await self.sql_user_repository.get_one(
                 email=dto.email
@@ -92,11 +94,10 @@ class VerifyUserWithEmailGetCodeUseCase:
                     detail='User not registered!'
                 )
         except BaseException as exception:
-            #raise HTTPException(
-            #    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            #    detail=str(exception)
-            #)
-            raise exception
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=str(exception)
+            )
 
 
 class VerifyUserWithEmailSetCodeUseCase:
@@ -112,7 +113,7 @@ class VerifyUserWithEmailSetCodeUseCase:
     async def __call__(
             self,
             dto: VerifyUserWithEmailSetCodeDTO
-    ):
+    ) -> None:
         try:
             existing_user_with_email = await self.sql_user_repository.get_one(
                 email=dto.email
