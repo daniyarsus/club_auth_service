@@ -20,8 +20,8 @@ class LoginUserRoutes:
     def _routes(self):
         @self.router.post("/username/authenticate")
         async def authenticate_with_username_endpoint(form_data: OAuth2PasswordRequestForm = Depends()):
-            admin_auth_service = injector.get(LoginUserInterface)
-            result = await admin_auth_service.authenticate_with_username(dto=form_data)
+            login_user_service = injector.get(LoginUserInterface)
+            result = await login_user_service.authenticate_with_username(dto=form_data)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
                 content=result
@@ -29,8 +29,8 @@ class LoginUserRoutes:
 
         @self.router.post("/email/authenticate")
         async def authenticate_with_email_endpoint(dto: LoginUserWithEmailDTO):
-            admin_auth_service = injector.get(LoginUserInterface)
-            result = await admin_auth_service.authenticate_with_email(dto=dto)
+            login_user_service = injector.get(LoginUserInterface)
+            result = await login_user_service.authenticate_with_email(dto=dto)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
                 content=result
@@ -38,8 +38,8 @@ class LoginUserRoutes:
 
         @self.router.post("/phone/authenticate")
         async def authenticate_with_phone_endpoint(dto: LoginUserWithPhoneDTO):
-            admin_auth_service = injector.get(LoginUserInterface)
-            result = await admin_auth_service.authenticate_with_phone(dto=dto)
+            login_user_service = injector.get(LoginUserInterface)
+            result = await login_user_service.authenticate_with_phone(dto=dto)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
                 content=result
@@ -47,8 +47,8 @@ class LoginUserRoutes:
 
         @self.router.post("/refresh_token")
         async def get_refresh_token_endpoint(token: str):
-            admin_auth_service = injector.get(LoginUserInterface)
-            result = await admin_auth_service.get_refresh_token(token=token)
+            login_user_service = injector.get(LoginUserInterface)
+            result = await login_user_service.get_refresh_token(token=token)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
                 content=result
