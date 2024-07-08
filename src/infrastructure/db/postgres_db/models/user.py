@@ -40,7 +40,7 @@ class User(SQLAlchemyBase):
     @validates('email', 'phone')
     def validate_email_or_phone(self, key, value):
         if key == 'email' and not value and not self.phone:
-            raise SQLAlchemyError("Either email or phone must be provided")
+            raise SQLAlchemyError("Either email or phone must be provided!")
         if key == 'phone' and not value and not self.email:
-            raise SQLAlchemyError("Either email or phone must be provided")
+            raise SQLAlchemyError("Either email or phone must be provided!")
         return value

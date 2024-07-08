@@ -27,9 +27,9 @@ class JWTRepository(JWTAbstractRepository):
             encoded_data: dict = data.copy()
 
             if token_type == "access":
-                expire: datetime = datetime.utcnow() + timedelta(seconds=int(JWT_ACCESS_TOKEN_EXPIRE_SECONDS))
+                expire: datetime = datetime.now() + timedelta(seconds=int(JWT_ACCESS_TOKEN_EXPIRE_SECONDS))
             elif token_type == "refresh":
-                expire: datetime = datetime.utcnow() + timedelta(seconds=int(JWT_REFRESH_TOKEN_EXPIRE_SECONDS))
+                expire: datetime = datetime.now() + timedelta(seconds=int(JWT_REFRESH_TOKEN_EXPIRE_SECONDS))
 
             encoded_data.update(
                 {
