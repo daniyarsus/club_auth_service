@@ -2,8 +2,9 @@ from typing import NoReturn, override
 
 from injector import singleton
 
-from .base import SQLAbstractRepository, SQLAlchemyRepository
 from src.infrastructure.db.postgres_db.models import User
+
+from .base import SQLAbstractRepository, SQLAlchemyRepository
 
 
 @singleton

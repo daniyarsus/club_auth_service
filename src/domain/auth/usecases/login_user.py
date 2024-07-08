@@ -1,21 +1,20 @@
 import uuid
 from typing import Dict
 
-from injector import inject
 from fastapi import HTTPException, status
-
-from src.domain.auth.dto import (
-    LoginUserWithUsernameDTO,
-    LoginUserWithEmailDTO,
-    LoginUserWithPhoneDTO,
-    GetRefreshTokenDTO
-)
-from src.domain.auth.exceptions import *
-from src.infrastructure.db.postgres_db.repositories import AbstractSQLUserRepository
-from src.infrastructure.db.redis_db.repositories import AbstractRedisAuthRepository
-from src.infrastructure.tokens.jwt.repositories import AbstractAuthJWTRepository
+from injector import inject
 
 import src.infrastructure.tokens.jwt.settings as jwt_settings
+from src.domain.auth.dto import (GetRefreshTokenDTO, LoginUserWithEmailDTO,
+                                 LoginUserWithPhoneDTO,
+                                 LoginUserWithUsernameDTO)
+from src.domain.auth.exceptions import *
+from src.infrastructure.db.postgres_db.repositories import \
+    AbstractSQLUserRepository
+from src.infrastructure.db.redis_db.repositories import \
+    AbstractRedisAuthRepository
+from src.infrastructure.tokens.jwt.repositories import \
+    AbstractAuthJWTRepository
 
 
 class AuthenticateWithUsernameUseCase:

@@ -1,16 +1,12 @@
+import smtplib
 from abc import ABC, abstractmethod
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from typing import NoReturn, override
 
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-
-from src.infrastructure.smtp.email.settings import (
-    SMTP_DOMAIN_NAME,
-    SMTP_PORT,
-    SMTP_API_KEY,
-    SMTP_EMAIL_FROM
-)
+from src.infrastructure.smtp.email.settings import (SMTP_API_KEY,
+                                                    SMTP_DOMAIN_NAME,
+                                                    SMTP_EMAIL_FROM, SMTP_PORT)
 
 
 class AbstractSMTPEmailRepository(ABC):

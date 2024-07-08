@@ -1,14 +1,11 @@
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 
-from jose import jwt, JWTError
+from jose import JWTError, jwt
 
 from src.infrastructure.tokens.jwt.settings import (
-    JWT_ACCESS_TOKEN_EXPIRE_SECONDS,
-    JWT_REFRESH_TOKEN_EXPIRE_SECONDS,
-    JWT_ALGORITHM,
-    JWT_SECRET_KEY
-)
+    JWT_ACCESS_TOKEN_EXPIRE_SECONDS, JWT_ALGORITHM,
+    JWT_REFRESH_TOKEN_EXPIRE_SECONDS, JWT_SECRET_KEY)
 
 
 class JWTAbstractRepository(ABC):

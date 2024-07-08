@@ -1,6 +1,6 @@
 from injector import singleton
 
-from .base import JWTRepository, JWTAbstractRepository
+from .base import JWTAbstractRepository, JWTRepository
 
 
 @singleton

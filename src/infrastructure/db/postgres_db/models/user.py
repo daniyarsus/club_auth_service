@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from sqlalchemy import Integer, String, TIMESTAMP, Boolean
-from sqlalchemy.orm import Mapped, mapped_column, validates
+from sqlalchemy import TIMESTAMP, Boolean, Integer, String
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Mapped, mapped_column, validates
 
 from .base import SQLAlchemyBase
 

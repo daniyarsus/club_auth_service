@@ -1,8 +1,9 @@
-from typing import NoReturn, Optional, List, Any, TypeVar, Type, override
 from abc import ABC, abstractmethod
+from typing import Any, List, NoReturn, Optional, Type, TypeVar, override
 
-from sqlalchemy import delete, update, insert
+from sqlalchemy import delete, insert, update
 from sqlalchemy.future import select
+
 from src.infrastructure.db.postgres_db.settings import async_session
 
 T = TypeVar('T')

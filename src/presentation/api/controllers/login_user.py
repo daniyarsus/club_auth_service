@@ -1,14 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
 
+from src.domain.auth.dto import (GetRefreshTokenDTO, LoginUserWithEmailDTO,
+                                 LoginUserWithPhoneDTO,
+                                 LoginUserWithUsernameDTO)
 from src.domain.auth.interfaces import LoginUserInterface
-from src.domain.auth.dto import (
-    LoginUserWithUsernameDTO,
-    LoginUserWithEmailDTO,
-    LoginUserWithPhoneDTO,
-    GetRefreshTokenDTO
-)
 from src.presentation.api.di import injector
 
 

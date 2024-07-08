@@ -1,5 +1,5 @@
-from pydantic import BaseModel, validator
 from phonenumbers import parse
+from pydantic import BaseModel, validator
 
 
 class ResetPhoneGetCodeDTO(BaseModel):

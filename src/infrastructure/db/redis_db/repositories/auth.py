@@ -1,4 +1,4 @@
-from typing import Any, override, NoReturn
+from typing import Any, NoReturn, override
 
 from injector import singleton
 

@@ -2,23 +2,22 @@ from typing import override
 
 from injector import inject, singleton
 
+from src.domain.auth.dto import (RegisterUserWithEmailDTO,
+                                 RegisterUserWithPhoneDTO,
+                                 VerifyUserWithEmailGetCodeDTO,
+                                 VerifyUserWithEmailSetCodeDTO,
+                                 VerifyUserWithPhoneGetCodeDTO,
+                                 VerifyUserWithPhoneSetCodeDTO)
 from src.domain.auth.interfaces import RegisterUserInterface
-from src.domain.auth.dto import (
-    RegisterUserWithEmailDTO, VerifyUserWithEmailGetCodeDTO, VerifyUserWithEmailSetCodeDTO,
-    RegisterUserWithPhoneDTO, VerifyUserWithPhoneGetCodeDTO, VerifyUserWithPhoneSetCodeDTO,
-)
-from src.domain.auth.usecases import (
-    RegisterUserWithEmailUseCase, VerifyUserWithEmailGetCodeUseCase, VerifyUserWithEmailSetCodeUseCase
-)
-from src.infrastructure.db.postgres_db.repositories import (
+from src.domain.auth.usecases import (RegisterUserWithEmailUseCase,
+                                      VerifyUserWithEmailGetCodeUseCase,
+                                      VerifyUserWithEmailSetCodeUseCase)
+from src.infrastructure.db.postgres_db.repositories import \
     AbstractSQLUserRepository
-)
-from src.infrastructure.db.redis_db.repositories import (
+from src.infrastructure.db.redis_db.repositories import \
     AbstractRedisAuthRepository
-)
-from src.infrastructure.smtp.email.repositories import (
+from src.infrastructure.smtp.email.repositories import \
     AbstractAuthSMTPEmailRepository
-)
 
 
 @singleton

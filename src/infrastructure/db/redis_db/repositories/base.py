@@ -1,5 +1,5 @@
-from typing import Any, NoReturn, override
 from abc import ABC, abstractmethod
+from typing import Any, NoReturn, override
 
 from src.infrastructure.db.redis_db.settings import async_redis_conn
 

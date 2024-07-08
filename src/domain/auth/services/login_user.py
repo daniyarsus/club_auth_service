@@ -1,23 +1,21 @@
-from typing import override, NoReturn
+from typing import NoReturn, override
 
 from injector import inject, singleton
 
+from src.domain.auth.dto import (GetRefreshTokenDTO, LoginUserWithEmailDTO,
+                                 LoginUserWithPhoneDTO,
+                                 LoginUserWithUsernameDTO)
 from src.domain.auth.interfaces import LoginUserInterface
-from src.domain.auth.dto import (
-    LoginUserWithUsernameDTO,
-    LoginUserWithEmailDTO,
-    LoginUserWithPhoneDTO,
-    GetRefreshTokenDTO
-)
-from src.domain.auth.usecases import (
-    AuthenticateWithUsernameUseCase,
-    AuthenticateWithEmailUseCase,
-    AuthenticateWithPhoneUseCase,
-    GetRefreshTokenUseCase
-)
-from src.infrastructure.db.postgres_db.repositories import AbstractSQLUserRepository
-from src.infrastructure.db.redis_db.repositories import AbstractRedisAuthRepository
-from src.infrastructure.tokens.jwt.repositories import AbstractAuthJWTRepository
+from src.domain.auth.usecases import (AuthenticateWithEmailUseCase,
+                                      AuthenticateWithPhoneUseCase,
+                                      AuthenticateWithUsernameUseCase,
+                                      GetRefreshTokenUseCase)
+from src.infrastructure.db.postgres_db.repositories import \
+    AbstractSQLUserRepository
+from src.infrastructure.db.redis_db.repositories import \
+    AbstractRedisAuthRepository
+from src.infrastructure.tokens.jwt.repositories import \
+    AbstractAuthJWTRepository
 
 
 @singleton

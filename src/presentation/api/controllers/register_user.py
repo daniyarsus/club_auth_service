@@ -1,12 +1,10 @@
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
 
+from src.domain.auth.dto import (RegisterUserWithEmailDTO,
+                                 VerifyUserWithEmailGetCodeDTO,
+                                 VerifyUserWithEmailSetCodeDTO)
 from src.domain.auth.interfaces import RegisterUserInterface
-from src.domain.auth.dto import (
-    RegisterUserWithEmailDTO,
-    VerifyUserWithEmailGetCodeDTO,
-    VerifyUserWithEmailSetCodeDTO
-)
 from src.presentation.api.di import injector
 
 

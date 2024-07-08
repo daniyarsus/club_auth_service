@@ -1,19 +1,16 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 
-from src.infrastructure.db.postgres_db.settings import (
-    POSTGRES_USER,
-    POSTGRES_PASS,
-    POSTGRES_HOST,
-    POSTGRES_PORT,
-    POSTGRES_NAME,
-    sync_DB_URL
-)
-from src.infrastructure.db.postgres_db.models.base import SQLAlchemyBase
 from src.infrastructure.db.postgres_db.models import *
+from src.infrastructure.db.postgres_db.models.base import SQLAlchemyBase
+from src.infrastructure.db.postgres_db.settings import (POSTGRES_HOST,
+                                                        POSTGRES_NAME,
+                                                        POSTGRES_PASS,
+                                                        POSTGRES_PORT,
+                                                        POSTGRES_USER,
+                                                        sync_DB_URL)
 
 config = context.config
 

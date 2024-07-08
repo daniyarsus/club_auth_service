@@ -1,5 +1,5 @@
-from pydantic import BaseModel, EmailStr, validator, ValidationError
 from phonenumbers import parse
+from pydantic import BaseModel, EmailStr, ValidationError, validator
 
 
 class RegisterUserWithEmailDTO(BaseModel):
