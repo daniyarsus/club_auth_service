@@ -5,7 +5,14 @@ from sqlalchemy import create_engine
 from src.config import settings
 
 
-async_DB_URL = f"postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASS}@{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_NAME}"
+POSTGRES_USER = settings.POSTGRES_USER
+POSTGRES_PASS = settings.POSTGRES_PASS
+POSTGRES_HOST = settings.POSTGRES_HOST
+POSTGRES_PORT = settings.POSTGRES_PORT
+POSTGRES_NAME = settings.POSTGRES_NAME
+
+
+async_DB_URL = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASS}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_NAME}"
 
 async_engine = create_async_engine(
     url=async_DB_URL,
@@ -18,7 +25,7 @@ async_session = async_sessionmaker(
     autocommit=False,
 )
 
-sync_DB_URL = f"postgresql://{settings.POSTGRES_USER}:{settings.POSTGRES_PASS}@{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_NAME}"
+sync_DB_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASS}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_NAME}"
 
 sync_engine = create_engine(
     url=sync_DB_URL,
@@ -30,7 +37,3 @@ sync_session = sessionmaker(
     expire_on_commit=False,
     autocommit=False,
 )
-
-
-from src.infrastructure.db.postgres_db.models.base import SQLAlchemyBase
-#SQLAlchemyBase.metadata.create_all(bind=sync_engine)
