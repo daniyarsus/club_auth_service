@@ -17,7 +17,7 @@ class LoginUserRoutes:
     def _routes(self):
         @self.router.post("/username/authenticate")
         async def authenticate_with_username_endpoint(form_data: OAuth2PasswordRequestForm = Depends()):
-            login_user_service = injector.get(LoginUserInterface)
+            login_user_service: LoginUserInterface = injector.get(LoginUserInterface)
             result = await login_user_service.authenticate_with_username(dto=form_data)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
@@ -26,7 +26,7 @@ class LoginUserRoutes:
 
         @self.router.post("/email/authenticate")
         async def authenticate_with_email_endpoint(dto: LoginUserWithEmailDTO):
-            login_user_service = injector.get(LoginUserInterface)
+            login_user_service: LoginUserInterface = injector.get(LoginUserInterface)
             result = await login_user_service.authenticate_with_email(dto=dto)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
@@ -35,7 +35,7 @@ class LoginUserRoutes:
 
         @self.router.post("/phone/authenticate")
         async def authenticate_with_phone_endpoint(dto: LoginUserWithPhoneDTO):
-            login_user_service = injector.get(LoginUserInterface)
+            login_user_service: LoginUserInterface = injector.get(LoginUserInterface)
             result = await login_user_service.authenticate_with_phone(dto=dto)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
@@ -44,7 +44,7 @@ class LoginUserRoutes:
 
         @self.router.post("/refresh_token")
         async def get_refresh_token_endpoint(token: str):
-            login_user_service = injector.get(LoginUserInterface)
+            login_user_service: LoginUserInterface = injector.get(LoginUserInterface)
             result = await login_user_service.get_refresh_token(token=token)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,

@@ -16,7 +16,7 @@ class RegisterUserRoutes:
     def _routes(self):
         @self.router.post("/email/add-user")
         async def create_user_email_endpoint(dto: RegisterUserWithEmailDTO):
-            register_user_service = injector.get(RegisterUserInterface)
+            register_user_service: RegisterUserInterface = injector.get(RegisterUserInterface)
             await register_user_service.register_user_with_email(dto=dto)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
@@ -25,7 +25,7 @@ class RegisterUserRoutes:
 
         @self.router.post("/email/get-code")
         async def send_verify_email_code_endpoint(dto: VerifyUserWithEmailGetCodeDTO):
-            register_user_service = injector.get(RegisterUserInterface)
+            register_user_service: RegisterUserInterface = injector.get(RegisterUserInterface)
             result = await register_user_service.get_email_code_verify_user(dto=dto)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
@@ -34,7 +34,7 @@ class RegisterUserRoutes:
 
         @self.router.post("/email/send-code")
         async def get_verify_email_code_endpoint(dto: VerifyUserWithEmailSetCodeDTO):
-            register_user_service = injector.get(RegisterUserInterface)
+            register_user_service: RegisterUserInterface = injector.get(RegisterUserInterface)
             await register_user_service.set_email_code_verify_user(dto=dto)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
@@ -42,4 +42,4 @@ class RegisterUserRoutes:
             )
 
 
-register_user_router = RegisterUserRoutes().router
+register_user_router: RegisterUserRoutes = RegisterUserRoutes().router

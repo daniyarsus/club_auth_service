@@ -5,7 +5,8 @@ from fastapi import HTTPException, status
 from injector import inject
 
 import src.infrastructure.tokens.jwt.settings as jwt_settings
-from src.domain.auth.dto import (GetRefreshTokenDTO, LoginUserWithEmailDTO,
+from src.domain.auth.dto import (GetRefreshTokenDTO,
+                                 LoginUserWithEmailDTO,
                                  LoginUserWithPhoneDTO,
                                  LoginUserWithUsernameDTO)
 from src.domain.auth.exceptions import *
@@ -34,7 +35,7 @@ class AuthenticateWithUsernameUseCase:
             dto: LoginUserWithUsernameDTO
     ) -> Dict[str, str]:
         try:
-            existing_user = await self.sql_user_repository.get_one(
+            existing_user: AbstractSQLUserRepository = await self.sql_user_repository.get_one(
                 username=dto.username
             )
             if existing_user:
@@ -48,15 +49,15 @@ class AuthenticateWithUsernameUseCase:
                             "username": existing_user.username,
                             "session_id": session_id
                         }
-                        access_token = await self.auth_jwt_repository.encode_token(
+                        access_token: AbstractAuthJWTRepository = await self.auth_jwt_repository.encode_token(
                             token_type="access",
                             data=data
                         )
-                        refresh_token = await self.auth_jwt_repository.encode_token(
+                        refresh_token: AbstractAuthJWTRepository = await self.auth_jwt_repository.encode_token(
                             token_type="refresh",
                             data=data
                         )
-                        token_set = await self.redis_auth_repository.set_one(
+                        token_set: AbstractRedisAuthRepository = await self.redis_auth_repository.set_one(
                             key=f"refresh_token_of_{session_id}",
                             value=refresh_token,
                             time_in_sec=getattr(jwt_settings, "JWT_REFRESH_TOKEN_EXPIRE_SECONDS")
@@ -107,13 +108,13 @@ class AuthenticateWithEmailUseCase:
             dto: LoginUserWithEmailDTO
     ) -> Dict[str, str]:
         try:
-            existing_user = await self.sql_user_repository.get_one(
+            existing_user: AbstractSQLUserRepository = await self.sql_user_repository.get_one(
                 email=dto.email
             )
             if existing_user:
                 if existing_user.is_verified:
                     if existing_user.password == dto.password:
-                        session_id = str(uuid.uuid4())
+                        session_id: uuid.uuid4() = str(uuid.uuid4())
                         data = {
                             "user_id": existing_user.id,
                             "email": existing_user.email,
@@ -121,15 +122,15 @@ class AuthenticateWithEmailUseCase:
                             "username": existing_user.username,
                             "session_id": session_id
                         }
-                        access_token = await self.auth_jwt_repository.encode_token(
+                        access_token: AbstractAuthJWTRepository = await self.auth_jwt_repository.encode_token(
                             token_type="access",
                             data=data
                         )
-                        refresh_token = await self.auth_jwt_repository.encode_token(
+                        refresh_token: AbstractAuthJWTRepository = await self.auth_jwt_repository.encode_token(
                             token_type="refresh",
                             data=data
                         )
-                        token_set = await self.redis_auth_repository.set_one(
+                        token_set: AbstractRedisAuthRepository = await self.redis_auth_repository.set_one(
                             key=f"refresh_token_of_{session_id}",
                             value=refresh_token,
                             time_in_sec=getattr(jwt_settings, "JWT_REFRESH_TOKEN_EXPIRE_SECONDS")
@@ -180,13 +181,13 @@ class AuthenticateWithPhoneUseCase:
             dto: LoginUserWithPhoneDTO
     ) -> Dict[str, str]:
         try:
-            existing_user = await self.sql_user_repository.get_one(
+            existing_user: AbstractSQLUserRepository = await self.sql_user_repository.get_one(
                 phone=dto.phone
             )
             if existing_user:
                 if existing_user.is_verified:
                     if existing_user.password == dto.password:
-                        session_id = str(uuid.uuid4())
+                        session_id: uuid.uuid4 = str(uuid.uuid4())
                         data = {
                             "user_id": existing_user.id,
                             "email": existing_user.email,
@@ -194,11 +195,11 @@ class AuthenticateWithPhoneUseCase:
                             "username": existing_user.username,
                             "session_id": session_id
                         }
-                        access_token = await self.auth_jwt_repository.encode_token(
+                        access_token: AbstractAuthJWTRepository = await self.auth_jwt_repository.encode_token(
                             token_type="access",
                             data=data
                         )
-                        refresh_token = await self.auth_jwt_repository.encode_token(
+                        refresh_token: AbstractAuthJWTRepository = await self.auth_jwt_repository.encode_token(
                             token_type="refresh",
                             data=data
                         )
@@ -260,11 +261,11 @@ class GetRefreshTokenUseCase:
             username = payload.get('username')
             session_id = payload.get('session_id')
 
-            existing_token = await self.redis_auth_repository.get_one(
+            existing_token: AbstractRedisAuthRepository = await self.redis_auth_repository.get_one(
                 key=f"refresh_token_of_{session_id}"
             )
             if existing_token:
-                check_token_type = payload.get('type')
+                check_token_type: dict = payload.get('type')
                 if check_token_type == 'refresh':
                     data = {
                         "user_id": user_id,
@@ -273,7 +274,7 @@ class GetRefreshTokenUseCase:
                         "username": username,
                         "session_id": session_id,
                     }
-                    access_token = await self.auth_jwt_repository.encode_token(
+                    access_token: AbstractAuthJWTRepository = await self.auth_jwt_repository.encode_token(
                         token_type='access',
                         data=data
                     )

@@ -1,4 +1,4 @@
-from typing import NoReturn, override
+from typing import override
 
 from injector import inject, singleton
 
@@ -20,6 +20,8 @@ from src.infrastructure.tokens.jwt.repositories import \
 
 @singleton
 class LoginUserService(LoginUserInterface):
+    __slots__ = ['sql_user_repository', 'redis_auth_repository', 'auth_jwt_repository']
+
     @inject
     def __init__(
             self,
@@ -33,7 +35,7 @@ class LoginUserService(LoginUserInterface):
 
     @override
     async def authenticate_with_username(self, dto: LoginUserWithUsernameDTO):
-        use_case = AuthenticateWithUsernameUseCase(
+        use_case: AuthenticateWithUsernameUseCase = AuthenticateWithUsernameUseCase(
             sql_user_repository=self.sql_user_repository,
             redis_auth_repository=self.redis_auth_repository,
             auth_jwt_repository=self.auth_jwt_repository
@@ -44,7 +46,7 @@ class LoginUserService(LoginUserInterface):
 
     @override
     async def authenticate_with_email(self, dto: LoginUserWithEmailDTO):
-        use_case = AuthenticateWithEmailUseCase(
+        use_case: AuthenticateWithEmailUseCase = AuthenticateWithEmailUseCase(
             sql_user_repository=self.sql_user_repository,
             redis_auth_repository=self.redis_auth_repository,
             auth_jwt_repository=self.auth_jwt_repository
@@ -55,7 +57,7 @@ class LoginUserService(LoginUserInterface):
 
     @override
     async def authenticate_with_phone(self, dto: LoginUserWithPhoneDTO):
-        use_case = AuthenticateWithPhoneUseCase(
+        use_case: AuthenticateWithPhoneUseCase = AuthenticateWithPhoneUseCase(
             sql_user_repository=self.sql_user_repository,
             redis_auth_repository=self.redis_auth_repository,
             auth_jwt_repository=self.auth_jwt_repository
@@ -66,7 +68,7 @@ class LoginUserService(LoginUserInterface):
 
     @override
     async def get_refresh_token(self, token: str):
-        use_case = GetRefreshTokenUseCase(
+        use_case: GetRefreshTokenUseCase = GetRefreshTokenUseCase(
             redis_auth_repository=self.redis_auth_repository,
             auth_jwt_repository=self.auth_jwt_repository
         )
