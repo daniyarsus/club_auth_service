@@ -15,7 +15,7 @@ services:
     container_name: postgres_container
     image: postgres:latest
     ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+      - "${POSTGRES_PORT}:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASS}
@@ -27,7 +27,7 @@ services:
     container_name: redis_container
     image: redis:latest
     ports:
-      - "${REDIS_PORT}:${REDIS_PORT}"
+      - "${REDIS_PORT}:6379"
     environment:
       REDIS_PASSWORD: ${REDIS_PASS}
     volumes:
